@@ -44,6 +44,24 @@ mae = mean_absolute_error(y_true, y_pred)
 rmse = np.sqrt(mean_squared_error(y_true, y_pred))
 r2 = r2_score(y_true, y_pred)
 
-print(f"📈 MAE (erro médio absoluto): {mae:.2f}")
-print(f"📉 RMSE (raiz do erro quadrático médio): {rmse:.2f}")
-print(f"📊 R² (coeficiente de determinação): {r2:.4f}")
+# Divisão em grupos
+faixas = {
+    'Baixa (≤30)': (y_true <= 30),
+    'Média (31–70)': ((y_true > 30) & (y_true <= 70)),
+    'Alta (>70)': (y_true > 70)
+}
+
+for nome, mask in faixas.items():
+    if not np.any(mask):
+        continue  # evitar grupos vazios
+    y_true_f = y_true[mask]
+    y_pred_f = y_pred[mask]
+
+    mae = mean_absolute_error(y_true_f, y_pred_f)
+    rmse = np.sqrt(mean_squared_error(y_true_f, y_pred_f))
+    erro_rel = np.mean(np.abs(y_true_f - y_pred_f) / y_true_f) * 100
+
+    print(f"\n📁 Faixa: {nome}")
+    print(f"  MAE: {mae:.2f}")
+    print(f"  RMSE: {rmse:.2f}")
+    print(f"  Erro Médio Relativo: {erro_rel:.2f}%")
