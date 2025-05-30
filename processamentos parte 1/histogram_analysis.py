@@ -1,13 +1,13 @@
 import cv2
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 # Pastas
 input_folder = os.path.join(os.path.dirname(__file__), "..", "imagens")
-output_folder = os.path.join(os.path.dirname(__file__), "..", "resultados", "geometric_logic")
+output_folder = os.path.join(os.path.dirname(__file__), "..", "resultados", "histogram_analysis")
 os.makedirs(output_folder, exist_ok=True)
 
-# Processar cada imagem
 for filename in os.listdir(input_folder):
     if filename.lower().endswith((".jpg", ".jpeg", ".png")):
         input_path = os.path.join(input_folder, filename)
@@ -17,21 +17,28 @@ for filename in os.listdir(input_folder):
             print(f"⚠️ Erro ao carregar {filename}, a ignorar...")
             continue
 
-        # Redimensionar
+        # Redimensionar para visualização
         resized = cv2.resize(img, (300, 300))
 
-        # Rotacionar
-        rotated = cv2.rotate(resized, cv2.ROTATE_90_CLOCKWISE)
+        # Calcular histogramas dos canais BGR
+        colors = ('b', 'g', 'r')
+        plt.figure(figsize=(8,4))
+        plt.subplot(1,2,1)
+        plt.imshow(cv2.cvtColor(resized, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+        plt.title('Imagem')
 
-        # Operação lógica: NOT
-        not_img = cv2.bitwise_not(rotated)
+        plt.subplot(1,2,2)
+        for i, color in enumerate(colors):
+            hist = cv2.calcHist([resized], [i], None, [256], [0,256])
+            plt.plot(hist, color=color)
+            plt.xlim([0,256])
+        plt.title('Histograma (BGR)')
+        plt.xlabel('Intensidade')
+        plt.ylabel('Nº de pixels')
 
-        # Nome do ficheiro sem extensão
-        name = os.path.splitext(filename)[0]
-
-        # Caminho de saída
-        output_path = os.path.join(output_folder, f"{name}_processed.jpg")
-
-        # Guardar imagem resultante
-        cv2.imwrite(output_path, not_img)
-        print(f"✅ Processado: {filename} → {output_path}")
+        plt.tight_layout()
+        out_path = os.path.join(output_folder, f"{os.path.splitext(filename)[0]}_hist.png")
+        plt.savefig(out_path)
+        plt.close()
+        print(f"✅ Histograma guardado: {out_path}")
