@@ -81,6 +81,18 @@ def build_density_model(input_shape=(224, 224, 3)):
     model.compile(optimizer=Adam(1e-4), loss='mse')
     return model
 
+# === Criar modelo ===
+model = build_density_model()
+
+# === Treinar modelo ===
+early_stop = EarlyStopping(patience=5, restore_best_weights=True)
+history = model.fit(
+    X_train, Y_train,
+    validation_data=(X_val, Y_val),
+    epochs=50,
+    batch_size=8,
+    callbacks=[early_stop]
+)
 
 # === Guardar modelo ===
 model.save('modelo_densitymap.keras')
