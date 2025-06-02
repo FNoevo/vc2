@@ -18,13 +18,23 @@ SIGMA = 16
 # Criar pasta de saída se não existir
 os.makedirs(OUT_DIR, exist_ok=True)
 
+
 def gerar_mapa_densidade(points, shape, original_shape):
     mapa = np.zeros(shape, dtype=np.float32)
     for point in points:
         x = min(int(point[0] * shape[1] / original_shape[1]), shape[1] - 1)
         y = min(int(point[1] * shape[0] / original_shape[0]), shape[0] - 1)
         mapa[y, x] += 1
-    return gaussian_filter(mapa, sigma=SIGMA)
+
+    mapa = gaussian_filter(mapa, sigma=SIGMA)
+
+    # Normalizar para manter soma igual ao nº de pessoas
+    total = len(points)
+    if mapa.sum() > 0:
+        mapa *= (total / mapa.sum())
+
+    return mapa
+
 
 # Processar todas as imagens
 for filename in tqdm(os.listdir(IMG_DIR)):
@@ -49,5 +59,8 @@ for filename in tqdm(os.listdir(IMG_DIR)):
     # Gerar e guardar mapa de densidade
     mapa_densidade = gerar_mapa_densidade(points, (MAP_HEIGHT, MAP_WIDTH), original_shape)
     np.save(out_path, mapa_densidade)
+
+    # Verificar soma do mapa
+    print(f"{filename}: pessoas = {len(points)}, soma_mapa = {np.sum(mapa_densidade):.2f}")
 
 print(f"✅ Mapas de densidade guardados em: {OUT_DIR}")
