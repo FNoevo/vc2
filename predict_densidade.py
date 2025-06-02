@@ -8,7 +8,7 @@ from tensorflow.keras.models import load_model
 # === Configurações ===
 IMG_DIR = 'part_B/test_data/images'
 GT_DIR = 'part_B/test_data/ground-truth'
-MODEL_PATH = 'melhor_modelo.h5'  # usa o modelo mais recente
+MODEL_PATH = 'melhor_csrnet.h5'  # usa o modelo mais recente
 CSV_PATH = 'predicoes.csv'
 SAVE_OVERLAYS = False  # mudar para True se quiseres guardar as imagens
 OVERLAY_DIR = 'resultados_overlay'

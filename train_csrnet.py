@@ -16,6 +16,8 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 IMG_DIR = 'part_B/train_data/images'
 DENSITY_DIR = 'part_B/train_data/density_maps'
 IMG_SIZE = 224
+TARGET_SIZE = 28  # CSRNet com saída 1/8 de 224
+
 
 # === Leitura dos dados ===
 X, Y = [], []
@@ -31,13 +33,19 @@ for filename in tqdm(sorted(os.listdir(IMG_DIR))):
     img = cv2.imread(img_path)
     if img is None:
         continue
-    img = cv2.resize(img, (IMG_SIZE, IMG_SIZE)).astype('float32') / 255.0
     dens = np.load(den_path).astype('float32')
-    if dens.shape != (IMG_SIZE, IMG_SIZE):
-        dens = cv2.resize(dens, (IMG_SIZE, IMG_SIZE), interpolation=cv2.INTER_CUBIC)
+
+    # 🔍 DEBUG: ver tamanho original
+    if dens.shape != (TARGET_SIZE, TARGET_SIZE):
+        print(f"🔁 Redimensionar {filename} de {dens.shape} para {TARGET_SIZE}x{TARGET_SIZE}")
+
+    # 🔧 Força sempre o resize para garantir compatibilidade
+    dens_resized = cv2.resize(dens, (TARGET_SIZE, TARGET_SIZE), interpolation=cv2.INTER_CUBIC)
+    dens_resized *= (np.sum(dens) / np.sum(dens_resized) + 1e-8)  # evita divisão por zero
 
     X.append(img)
-    Y.append(dens)
+    Y.append(dens_resized)
+
 
 X = np.array(X)
 Y = np.expand_dims(np.array(Y), axis=-1)
@@ -57,7 +65,7 @@ def build_csrnet(input_shape=(224, 224, 3)):
         x = Conv2D(filters, (3, 3), dilation_rate=dilation, activation='relu', padding='same')(x)
         x = BatchNormalization()(x)
 
-    output = Conv2D(1, (1, 1), activation='linear', padding='same')(x)
+    output = Conv2D(1, (1, 1), activation='relu', padding='same')(x)  # ativação alterada para relu
     model = Model(inputs=vgg.input, outputs=output)
     model.compile(optimizer=Adam(1e-4), loss=tf.keras.losses.LogCosh(), metrics=['mse'])
     return model
@@ -74,11 +82,12 @@ lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, ver
 
 # === Treino ===
 history = model.fit(
-    datagen.flow(X_train, Y_train, batch_size=16),
+    datagen.flow(X_train, Y_train, batch_size=4),
     validation_data=(X_val, Y_val),
     epochs=50,
     callbacks=[early_stop, checkpoint, lr_scheduler]
 )
+
 
 # === Gráfico da perda ===
 plt.figure()
@@ -92,3 +101,8 @@ plt.grid(True)
 plt.tight_layout()
 plt.savefig("grafico_csrnet.png")
 plt.show()
+
+print("Shape final das imagens:", X.shape)      # (400, 224, 224, 3)
+print("Shape final dos mapas:", Y.shape)        # (400, 28, 28, 1)
+
+print(f"Imagem: {img.shape}, Mapa: {dens.shape}")
