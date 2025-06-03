@@ -64,3 +64,5 @@ for filename in tqdm(os.listdir(IMG_DIR)):
     print(f"{filename}: pessoas = {len(points)}, soma_mapa = {np.sum(mapa_densidade):.2f}")
 
 print(f"✅ Mapas de densidade guardados em: {OUT_DIR}")
+
+
