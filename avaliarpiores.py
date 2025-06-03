@@ -8,7 +8,7 @@ from tensorflow.keras.models import load_model
 
 # Caminhos
 CSV_PATH = 'avaliacao_modelo.csv'
-IMG_DIR = 'part_B/test_data/images'
+IMG_DIR = '../part_B/test_data/images'
 GT_DIR = 'part_B/test_data/ground-truth'
 MODEL_PATH = 'melhor_modelo.h5'
 
