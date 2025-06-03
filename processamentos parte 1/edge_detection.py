@@ -30,7 +30,7 @@ for fn in os.listdir(INPUT):
       "tigre3.jpg":    (50, 50, 500, 300),
       "ponteee.jpg":   (100,100,800,400),
     }
-    # 1) define e clamp a ROI
+    # 1) define e limite a ROI(x e y, coordenadas canto superior esquerdo do ROI e w,h são altura e largura do ROI)
     x, y, w, h = 0, 0, orig_w, orig_h
     x = max(0, min(x, orig_w-1))
     y = max(0, min(y, orig_h-1))
@@ -45,7 +45,7 @@ for fn in os.listdir(INPUT):
     # ——— 3) detecção de bordas adaptativa ———
     edges = auto_canny(blurred)
 
-    # ——— 4) limpeza morfológica (opcional) ———
+    # ——— 4) limpeza morfológica ———
     if DILATE_ITERS>0:
         edges = cv2.dilate(edges, None, iterations=DILATE_ITERS)
     if ERODE_ITERS>0:

@@ -8,7 +8,7 @@ from tensorflow.keras.models import load_model
 # === Configurações ===
 IMG_DIR = 'part_B/test_data/images'
 GT_DIR = 'part_B/test_data/ground-truth'
-MODEL_PATH = 'melhor_csrnet.h5'  # usa o modelo mais recente
+MODEL_PATH = 'melhor_modelo.h5'  # usa o modelo mais recente
 CSV_PATH = 'predicoes.csv'
 SAVE_OVERLAYS = False  # mudar para True se quiseres guardar as imagens
 OVERLAY_DIR = 'resultados_overlay'
@@ -20,7 +20,7 @@ if SAVE_OVERLAYS:
 
 # Carregar modelo
 model = load_model(MODEL_PATH)
-test_imgs = sorted([f for f in os.listdir(IMG_DIR) if f.endswith('.jpg')])[:50]  # podes remover o slice para avaliar tudo
+test_imgs = sorted([f for f in os.listdir(IMG_DIR) if f.endswith('.jpg')])[:50]  # pode-se remover o slice para avaliar tudo
 
 # Criar ficheiro CSV
 with open(CSV_PATH, 'w') as f:

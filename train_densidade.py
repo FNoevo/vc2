@@ -9,7 +9,6 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import matplotlib.pyplot as plt
 
-# === Caminhos ===
 IMG_DIR = 'part_B/train_data/images'
 DENSITY_DIR = 'part_B/train_data/density_maps'
 
@@ -107,7 +106,7 @@ history = model.fit(
     callbacks=[early_stop, checkpoint]
 )
 
-print("✅ Modelo treinado. O melhor foi guardado como 'melhor_modelo.h5'.")
+print("✅ Modelo treinado. Guardado como 'melhor_modelo.h5'.")
 
 # === Gráfico da perda ===
 plt.figure()

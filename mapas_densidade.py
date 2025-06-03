@@ -5,7 +5,6 @@ import scipy.io
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter
 
-# Diretórios
 IMG_DIR = 'part_B/train_data/images'
 GT_DIR = 'part_B/train_data/ground-truth'
 OUT_DIR = 'part_B/train_data/density_maps'

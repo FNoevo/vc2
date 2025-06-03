@@ -3,7 +3,6 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 
-# Pastas
 input_folder = os.path.join(os.path.dirname(__file__), "..", "imagens")
 output_folder = os.path.join(os.path.dirname(__file__), "..", "resultados", "histogram_analysis")
 os.makedirs(output_folder, exist_ok=True)

@@ -56,7 +56,7 @@ for fn in os.listdir(input_folder):
     # Operação lógica: inverter as cores da imagem melhorada
     logic_result = cv2.bitwise_not(improved)
 
-    # Comparação lado a lado (original | lógica)
+    # Comparação lado a lado
     comparison = np.hstack([resized, logic_result])
 
     name = os.path.splitext(fn)[0]

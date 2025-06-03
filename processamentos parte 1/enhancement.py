@@ -40,7 +40,7 @@ for fn in os.listdir(input_folder):
     path = os.path.join(input_folder, fn)
     img = read_image_with_orientation(path)
     if img is None:
-        print(f"Erro ao ler {fn}")
+        print(f"Erro a ler {fn}")
         continue
 
     # Aplica nitidez
