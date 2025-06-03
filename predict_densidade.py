@@ -93,3 +93,4 @@ for filename in test_imgs:
     if SAVE_OVERLAYS:
         save_path = os.path.join(OVERLAY_DIR, filename.replace('.jpg', '_overlay.png'))
         cv2.imwrite(save_path, cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR))
+
