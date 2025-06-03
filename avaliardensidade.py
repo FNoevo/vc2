@@ -71,3 +71,4 @@ print(f"\n📊 Avaliação Final:")
 print(f"➡️  MAE  (Erro absoluto médio)     : {mae:.2f}")
 print(f"➡️  RMSE (Raiz do erro quadrático) : {rmse:.2f}")
 print(f"✅ Resultados guardados em {CSV_PATH}")
+
