@@ -95,6 +95,8 @@ model = build_density_model()
 # === Callbacks ===
 early_stop = EarlyStopping(patience=5, restore_best_weights=True, monitor='val_loss')
 checkpoint = ModelCheckpoint('melhor_modelo.h5', save_best_only=True, monitor='val_loss', mode='min', verbose=1)
+print("Saída esperada:", Y_train.shape)
+print("Saída do modelo:", model.output_shape)
 
 # === Treinar modelo ===
 history = model.fit(
