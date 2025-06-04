@@ -14,7 +14,7 @@ MODEL_PATH = 'contador_pessoas.keras'
 model = load_model(MODEL_PATH)
 
 # Selecionar 5 imagens de teste (ordenadas alfabeticamente)
-test_imgs = sorted([f for f in os.listdir(IMG_DIR) if f.endswith('.jpg')])[:5]
+test_imgs = sorted([f for f in os.listdir(IMG_DIR) if f.endswith('.jpg')])[:50]  # pode-se remover o slice para avaliar tudo
 
 for filename in test_imgs:
     img_path = os.path.join(IMG_DIR, filename)

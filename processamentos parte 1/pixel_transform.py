@@ -11,7 +11,7 @@ for fn in os.listdir(input_folder):
     if img is None:
         continue
 
-    # Negativo
+    # Negativo da imagem
     inverted = 255 - img
 
     # Binarização simples (threshold)

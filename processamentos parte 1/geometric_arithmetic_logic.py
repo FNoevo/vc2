@@ -11,7 +11,7 @@ SHARPEN_AMOUNT = 1.0
 
 input_folder  = os.path.join(os.path.dirname(__file__), "..", "imagens")
 output_folder = os.path.join(os.path.dirname(__file__), "..", "resultados", "geometric_logic")
-os.makedirs(output_folder, exist_ok=True)
+os.makedirs(output_folder, exist_ok=True) #cria a pasta de saida se nao existir
 
 def read_image_with_orientation(path):
     img_pil = Image.open(path)
@@ -37,7 +37,7 @@ kernel = np.array([[0, -1, 0],
                    [-1, 5 + SHARPEN_AMOUNT, -1],
                    [0, -1, 0]], dtype=np.float32)
 
-for fn in os.listdir(input_folder):
+for fn in os.listdir(input_folder): #carrega imagem com orientacao corrigida, redimensiona(512) aplica nitidez, constraste e brilho
     if not fn.lower().endswith((".jpg",".png",".jpeg")): continue
     img = read_image_with_orientation(os.path.join(input_folder, fn))
     if img is None:
@@ -62,4 +62,4 @@ for fn in os.listdir(input_folder):
     name = os.path.splitext(fn)[0]
     cv2.imwrite(os.path.join(output_folder, f"{name}_logic.jpg"), logic_result)
     cv2.imwrite(os.path.join(output_folder, f"{name}_compare.jpg"), comparison)
-    print(f"✅ {fn} → {output_folder}")
+    print(f"✅ {fn} → {output_folder}") #mostra o nome do arquivo processado e onde foi salvo

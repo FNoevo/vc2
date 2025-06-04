@@ -12,6 +12,7 @@ INPUT  = os.path.join(os.path.dirname(__file__), "..", "imagens")
 OUTPUT = os.path.join(os.path.dirname(__file__), "..", "resultados", "edges_adaptive")
 os.makedirs(OUTPUT, exist_ok=True)
 
+    #Limiares low e high(bordas)
 def auto_canny(gray, sigma=SIGMA):
     v = np.median(gray)
     low  = int(max(0, (1.0 - sigma)*v))
@@ -38,14 +39,14 @@ for fn in os.listdir(INPUT):
     h = max(1, min(h, orig_h - y))
     sub = img[y:y+h, x:x+w]
 
-    # ——— 2) blur para reduzir ruído ———
+    # ——— 2) blur para reduzir ruído(Aplicacao de Filtro)———
     gray = cv2.cvtColor(sub, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, BLUR_KSIZE, 0)
 
-    # ——— 3) detecção de bordas adaptativa ———
+    # ——— 3) detecção de bordas adaptativa(Mapa binario edges) ———
     edges = auto_canny(blurred)
 
-    # ——— 4) limpeza morfológica ———
+    # ——— 4) limpa pequenas imperfeicoes ———
     if DILATE_ITERS>0:
         edges = cv2.dilate(edges, None, iterations=DILATE_ITERS)
     if ERODE_ITERS>0:
